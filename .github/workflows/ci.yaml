@@ -20,9 +20,6 @@ jobs:
                   SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
     test:
         runs-on: ubuntu-latest
-        strategy:
-            matrix:
-                folder: ["", "", ""]
 
         steps:
             - name: Git checkout
@@ -38,8 +35,8 @@ jobs:
               with:
                   postgresql-version: "14"
 
-            - run: npm install
-              working-directory: ${{ matrix.folder }}
+            - run: npm install -g pnpm
+
+            - run: pnpm install
 
             - run: pnpm -r test
-              working-directory: ${{ matrix.folder }}
