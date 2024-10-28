@@ -1,2 +1,2 @@
-packages:
+packages: //permet de lancer package.json de chaque services
     - "services/*"
