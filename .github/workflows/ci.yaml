@@ -1,12 +1,9 @@
 name: Run tests
 
 on:
-    push:
-        branches:
-            - develop
     pull_request:
         branches:
-            - develop
+            - master
 
 jobs:
     sonarcloud:
@@ -21,7 +18,7 @@ jobs:
               env:
                   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Needed to get PR information, if any
                   SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-    build:
+    test:
         runs-on: ubuntu-latest
         strategy:
             matrix:
