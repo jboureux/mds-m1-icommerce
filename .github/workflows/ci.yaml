@@ -1,0 +1,36 @@
+name: Run tests
+
+on:
+  push:
+    branches:
+      - develop
+  pull_request:
+    branches:
+      - develop
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        folder: ["", "", ""]
+
+    steps:
+      - name: Git checkout
+        uses: actions/checkout@v4
+
+      - name: Use Node.js 22.x
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22.x
+
+      - name: Start PostgreSQL
+        uses: Harmon758/postgresql-action@v1.2.0
+        with:
+          postgresql-version: "14"
+
+      - run: npm install
+        working-directory: ${{ matrix.folder }}
+
+      - run: pnpm -r test
+        working-directory: ${{ matrix.folder }}
