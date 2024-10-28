@@ -1,36 +1,48 @@
 name: Run tests
 
 on:
-  push:
-    branches:
-      - develop
-  pull_request:
-    branches:
-      - develop
+    push:
+        branches:
+            - develop
+    pull_request:
+        branches:
+            - develop
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        folder: ["", "", ""]
+    sonarcloud:
+        name: SonarCloud
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
+              with:
+                  fetch-depth: 0 # Shallow clones should be disabled for a better relevancy of analysis
+            - name: SonarCloud Scan
+              uses: SonarSource/sonarcloud-github-action@master
+              env:
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Needed to get PR information, if any
+                  SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+    build:
+        runs-on: ubuntu-latest
+        strategy:
+            matrix:
+                folder: ["", "", ""]
 
-    steps:
-      - name: Git checkout
-        uses: actions/checkout@v4
+        steps:
+            - name: Git checkout
+              uses: actions/checkout@v4
 
-      - name: Use Node.js 22.x
-        uses: actions/setup-node@v4
-        with:
-          node-version: 22.x
+            - name: Use Node.js 22.x
+              uses: actions/setup-node@v4
+              with:
+                  node-version: 22.x
 
-      - name: Start PostgreSQL
-        uses: Harmon758/postgresql-action@v1.2.0
-        with:
-          postgresql-version: "14"
+            - name: Start PostgreSQL
+              uses: Harmon758/postgresql-action@v1.2.0
+              with:
+                  postgresql-version: "14"
 
-      - run: npm install
-        working-directory: ${{ matrix.folder }}
+            - run: npm install
+              working-directory: ${{ matrix.folder }}
 
-      - run: pnpm -r test
-        working-directory: ${{ matrix.folder }}
+            - run: pnpm -r test
+              working-directory: ${{ matrix.folder }}
