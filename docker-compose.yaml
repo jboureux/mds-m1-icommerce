@@ -1,3 +1,5 @@
+# 1 - Mapper les ports des micro-services dans les ports du service monorepo
+# 2 - Recréer une nouvelle instance de postgres pour les micro-services  
 services: 
   monorepo:
     restart: on-failure
