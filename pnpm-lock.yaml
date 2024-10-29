@@ -1,0 +1,19 @@
+lockfileVersion: '9.0'
+
+settings:
+  autoInstallPeers: true
+  excludeLinksFromLockfile: false
+
+importers:
+
+  services/auth: {}
+
+  services/cart: {}
+
+  services/category: {}
+
+  services/paiement: {}
+
+  services/product: {}
+
+  services/user: {}
