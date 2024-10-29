@@ -92,9 +92,6 @@ importers:
       jest:
         specifier: ^29.7.0
         version: 29.7.0(@types/node@22.8.2)(ts-node@10.9.2(@types/node@22.8.2)(typescript@5.6.3))
-      prisma:
-        specifier: ^5.21.1
-        version: 5.21.1
       supertest:
         specifier: ^7.0.0
         version: 7.0.0
@@ -104,6 +101,10 @@ importers:
       typescript:
         specifier: ^5.6.3
         version: 5.6.3
+    devDependencies:
+      prisma:
+        specifier: ^5.21.1
+        version: 5.21.1
 
 packages:
 
