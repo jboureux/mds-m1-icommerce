@@ -1,4 +1,3 @@
-import { PrismaClient } from '@prisma/client';
 import { db } from '../database';
 import { Request, Response } from 'express';
 
@@ -13,7 +12,7 @@ export class CategoryService {
     const { id } = req.params;
     const category = await db.category.findUnique({
       where: {
-        id: Number(id),
+        id,
       },
     });
 
@@ -37,7 +36,7 @@ export class CategoryService {
     const { name, slug } = req.body;
     const category = await db.category.update({
       where: {
-        id: Number(id),
+        id,
       },
       data: {
         name,
@@ -52,7 +51,7 @@ export class CategoryService {
     const { id } = req.params;
     await db.category.delete({
       where: {
-        id: Number(id),
+        id,
       },
     });
 

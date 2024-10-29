@@ -1,14 +1,13 @@
 import { PrismaClient } from '@prisma/client';
 
-let db: PrismaClient;
+const db: PrismaClient = global.__db || new PrismaClient();
 
 declare global {
   var __db: PrismaClient | undefined;
 }
 
 if (!global.__db) {
-  global.__db = new PrismaClient();
+  global.__db = db;
 }
-db = global.__db;
 
 export { db };
