@@ -7,8 +7,11 @@ services:
       dockerfile: docker/DEV.Dockerfile
     depends_on:
       - postgres
+    ports:
+      - '5555:5555'
     environment:
-      DATABASE_URL: postgres://user:pass@postgres:5432/db
+      DATABASE_URL: ${DATABASE_URL}
+      PORT: ${PORT}
       NODE_ENV: development
     volumes:
       - .:/app/
