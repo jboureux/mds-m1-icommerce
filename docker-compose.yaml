@@ -11,8 +11,8 @@ services:
       - '8000-8007:8000-8007'
       - '5555:5555'
     environment:
-      DATABASE_URL: ${DATABASE_URL}
-      PORT: ${PORT}
+      DATABASE_URL: ${CATEGORY_DATABASE_URL}
+      PORT: ${CATEGORY_PORT}
       NODE_ENV: development
     volumes:
       - .:/app/
