@@ -1,4 +1,4 @@
-FROM node:lts-alpine AS builder
+FROM node:20-alpine AS builder
 
 ARG SERVICE
 
@@ -14,7 +14,7 @@ RUN pnpm i --filter ${SERVICE}
 
 RUN pnpm --filter ${SERVICE} build
 
-FROM node:lts-alpine AS production
+FROM node:20-alpine AS production
 
 ARG SERVICE
 
