@@ -1,6 +1,7 @@
 import app from '@adonisjs/core/services/app'
 import { HttpContext, ExceptionHandler } from '@adonisjs/core/http'
 import { errors } from '@adonisjs/auth'
+import { SimpleErrorReporter } from '@vinejs/vine'
 
 export default class HttpExceptionHandler extends ExceptionHandler {
   /**
@@ -14,10 +15,6 @@ export default class HttpExceptionHandler extends ExceptionHandler {
    * response to the client
    */
   async handle(error: unknown, ctx: HttpContext) {
-    if (error instanceof errors.E_INVALID_CREDENTIALS){
-      return ctx.response.badRequest({error: "password or email incorrect"})
-    }
-
     return super.handle(error, ctx)
   }
 

@@ -20,4 +20,8 @@ router.group(()=>{
     UsersController,"loginUser",
   ])
 
+  router.delete('deleteMany',[
+    UsersController,"deleteAll"
+  ])
+
 }).prefix("/user")

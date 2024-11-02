@@ -23,8 +23,6 @@ import vine from '@vinejs/vine'
             password: vine.string(),
         })
     )
-
-    console.log(loginUserValidator.errorReporter);
     
     export const updateUserValidator = vine.compile(
         vine.object({
