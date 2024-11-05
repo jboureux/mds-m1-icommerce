@@ -6,18 +6,18 @@ services:
     build:
       dockerfile: docker/DEV.Dockerfile
     depends_on:
-      - postgres
+      - category-db
     ports:
-      - '8000-8007:8000-8007'
+      - '8004:8004'
       - '5555:5555'
     environment:
-      DATABASE_URL: ${CATEGORY_DATABASE_URL}
-      PORT: ${CATEGORY_PORT}
+      CATEGORY_DATABASE_URL: ${CATEGORY_DATABASE_URL}
+      CATEGORY_PORT: ${CATEGORY_PORT}
       NODE_ENV: development
     volumes:
       - .:/app/
 
-  postgres:
+  category-db:
     image: postgres:17
     ports:
       - '5432:5432'
