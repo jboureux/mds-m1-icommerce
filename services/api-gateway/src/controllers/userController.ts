@@ -18,7 +18,7 @@ export async function registerUser(req: Request, res: Response) {
     res.json({ result: true, user });
   } catch (error) {
     console.error("Error in registerUser controller:", error);
-    res.status(500).json({ result: false, error: (error as Error).message });
+    res.status(400).json({ result: false, error: (error as Error).message });
   }
 }
 
@@ -36,7 +36,7 @@ export async function loginUser(req: Request, res: Response) {
     res.json({ result: true, user });
   } catch (error) {
     console.error("Error in loginUser controller:", error);
-    res.status(500).json({ result: false, error: (error as Error).message });
+    res.status(400).json({ result: false, error: (error as Error).message });
   }
 }
 
@@ -46,6 +46,6 @@ export async function deleteAllUsers(req: Request, res: Response) {
     res.status(200).json({ result: true, message: "All users deleted successfully" });
   } catch (error) {
     console.error("Error in deleteAllUsers controller:", error);
-    res.status(500).json({ result: false, error: (error as Error).message });
+    res.status(400).json({ result: false, error: (error as Error).message });
   }
 }
