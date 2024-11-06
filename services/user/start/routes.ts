@@ -7,9 +7,9 @@
 |
 */
 
-const UsersController = ()=> import('#controllers/users_controller');
-
 import router from '@adonisjs/core/services/router';
+
+const UsersController = ()=> import('#controllers/users_controller');
 
 router.group(()=>{
   router.post('register',[

@@ -1,5 +1,6 @@
 import { defineConfig, drivers } from '@adonisjs/core/hash'
 
+
 export default defineConfig({
   // Make sure to update the default driver to argon
   default: 'argon',
@@ -17,10 +18,5 @@ export default defineConfig({
   }
 })
 
-/**
- * Inferring types for the list of hashers you have configured
- * in your application.
- */
-declare module '@adonisjs/core/types' {
-  export interface HashersList extends InferHashers<typeof hashConfig> {}
-}
+
+
