@@ -1,10 +1,16 @@
 import express from 'express'
-import { createProductController, getAllProductsController, getProductByIdController } from '../controllers/controllers'
+import { 
+    getAllProductsController,
+        getProductByIdController, 
+        createProductController, 
+        deleteProductController 
+    } from '../controllers/controllers'
 
 const ProductRouter = express.Router()
 
-ProductRouter.post('/', createProductController)
 ProductRouter.get('/all', getAllProductsController)
 ProductRouter.get('/:id', getProductByIdController)
+ProductRouter.post('/', createProductController)
+ProductRouter.delete('/:id', deleteProductController)
 
 export default ProductRouter

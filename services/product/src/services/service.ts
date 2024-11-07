@@ -48,3 +48,13 @@ export const getProductById = async (id: number) => {
         throw new Error("Erreur lors de la récupération du produit.")
     }
 }
+
+ // Service pour supprimer un produit
+ export const deleteProduct = async (id: number) => {
+    try {
+        await prisma.product.delete({ where: { id } })
+    } catch (error) {
+        console.error("Erreur lors de la suppression du produit :", error)
+        throw new Error("Erreur lors de la suppression du produit.")
+    }
+ } 

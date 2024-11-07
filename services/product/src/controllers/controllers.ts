@@ -1,6 +1,6 @@
 
 import { Request, Response } from 'express'
-import { createProduct, getAllProducts, getProductById } from '../services/service'
+import { createProduct, getAllProducts, getProductById, deleteProduct } from '../services/service'
 
 export const createProductController = async (req: Request, res: Response) => {
     const { name, slug, defaultPrice, categories } = req.body
@@ -33,5 +33,15 @@ export const getProductByIdController = async (req: Request, res: Response) => {
         }
     } catch (error) {
         res.status(500).json({ error: "Erreur lors de la récupération du produit"})
+    }
+}
+
+export const deleteProductController = async (req: Request, res: Response) => {
+    const { id } = req.params
+    try {
+        await deleteProduct(Number(id))
+        res.status(204).send()
+    } catch (error) {
+        res.status(500).json({ error: "Erreur lors de la suppression du produit." })
     }
 }
