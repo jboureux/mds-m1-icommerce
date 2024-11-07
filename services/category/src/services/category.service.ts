@@ -1,5 +1,6 @@
 import { db } from '../database';
 import { Request, Response } from 'express';
+import { slugify } from '../utils/constants';
 
 export class CategoryService {
   async getCategories(req: Request, res: Response) {
@@ -20,7 +21,8 @@ export class CategoryService {
   }
 
   async createCategory(req: Request, res: Response) {
-    const { name, slug } = req.body;
+    const { name } = req.body;
+    const slug = slugify(name);
     const category = await db.category.create({
       data: {
         name,
@@ -33,7 +35,8 @@ export class CategoryService {
 
   async updateCategory(req: Request, res: Response) {
     const { id } = req.params;
-    const { name, slug } = req.body;
+    const { name } = req.body;
+    const slug = slugify(name);
     const category = await db.category.update({
       where: {
         id,
