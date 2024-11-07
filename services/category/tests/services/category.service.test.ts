@@ -2,8 +2,18 @@ import request from 'supertest';
 import express from 'express';
 import { CategoryService } from '../../src/services/category.service';
 import { db } from '../../src/database';
+import { slugify } from '../../src/utils/constants';
+// import { jest } from '@jest/globals';
 
-jest.mock('../../src/database');
+jest.mock('../../src/services/category.service', () => ({
+  CategoryService: jest.fn().mockImplementation(() => ({
+    getCategories: jest.fn(),
+    getCategoryById: jest.fn(),
+    createCategory: jest.fn(),
+    updateCategory: jest.fn(),
+    deleteCategory: jest.fn(),
+  })),
+}));
 const app = express();
 app.use(express.json());
 
@@ -40,11 +50,7 @@ describe('CategoryService', () => {
       createdAt: new Date(),
       updatedAt: new Date(),
     };
-    (
-      db.category.findUnique as jest.MockedFunction<
-        typeof db.category.findUnique
-      >
-    ).mockResolvedValueOnce(mockCategory);
+    jest.mocked(db.category.findUnique).mockResolvedValueOnce(mockCategory);
 
     const response = await request(app).get('/categories/1');
     expect(response.status).toBe(200);
@@ -54,15 +60,13 @@ describe('CategoryService', () => {
 
   it('should create a category', async () => {
     const mockCategory = {
-      id: '1',
+      id: '121',
       name: 'Category 1',
-      slug: 'category-1',
+      slug: slugify('Category 1'),
       createdAt: new Date(),
       updatedAt: new Date(),
     };
-    (
-      db.category.create as jest.MockedFunction<typeof db.category.create>
-    ).mockResolvedValueOnce(mockCategory);
+    jest.mocked(db.category.create).mockResolvedValueOnce(mockCategory);
 
     const response = await request(app)
       .post('/categories')
@@ -76,15 +80,13 @@ describe('CategoryService', () => {
 
   it('should update a category', async () => {
     const mockCategory = {
-      id: '1',
-      name: 'Category 1',
-      slug: 'category-1',
+      id: '121',
+      name: 'Category 13',
+      slug: slugify('Category 13'),
       createdAt: new Date(),
       updatedAt: new Date(),
     };
-    (
-      db.category.update as jest.MockedFunction<typeof db.category.update>
-    ).mockResolvedValueOnce(mockCategory);
+    jest.mocked(db.category.update).mockResolvedValueOnce(mockCategory);
 
     const response = await request(app)
       .put('/categories/1')
