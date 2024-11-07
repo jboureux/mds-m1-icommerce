@@ -15,6 +15,7 @@ services:
       - '5555:5555'
     environment:
       USER_SERVICE_URL: 'http://localhost:8001'
+      CATEGORY_SERVICE_URL: 'http://localhost:8004'
       USER_DB_HOST: user-db
       USER_DB_PORT: 5432
       USER_DB_USER: user
