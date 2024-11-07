@@ -49,6 +49,50 @@ export const getProductById = async (id: number) => {
     }
 }
 
+// Service pour update un produit
+export const updateProduct = async (id: number, 
+        data: { 
+        name?: string, 
+        slug?: string, 
+        defaultPrice?: number, 
+        categoryId?: number, 
+        //categoryIds?: number[], 
+        //images?: string[] 
+    }) => {
+        try {
+            const updatedProduct = await prisma.$transaction(async (prisma) => {
+                const product = await prisma.product.update({
+                    where: { id },
+                    data: { name: data.name, slug: data.slug, defaultPrice: data.defaultPrice,  categoryId: data.categoryId},
+                })
+
+                /*if (data.categoryIds) {
+                    await prisma.productCategory.deleteMany({ where: { productId: product.id }})
+                    await prisma.productCategory.createMany({ data: data.images?.map(categoryId => ({
+                            productId: product.id, categoryId
+                        })
+                    )})
+                }
+
+                if (data.images) {
+                    await prisma.productImages.deleteMany({ where: { productId: product.id } }) 
+                    await prisma.productImages.createMany({ data: data.images.map(categoryId => ({
+                            productId: product.id, categoryId
+                        }) 
+                    )})    
+                }*/
+
+                return product
+            })
+
+            return updatedProduct
+        } catch (error) {
+            console.error("Erreur lors de la mise à jour du produit :", error)
+            throw new Error("Erreur lors de la mise à jour du produit.")
+        }
+    } 
+
+
  // Service pour supprimer un produit
  export const deleteProduct = async (id: number) => {
     try {

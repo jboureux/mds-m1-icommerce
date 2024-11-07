@@ -1,6 +1,6 @@
 
 import { Request, Response } from 'express'
-import { createProduct, getAllProducts, getProductById, deleteProduct } from '../services/service'
+import { createProduct, getAllProducts, getProductById, updateProduct, deleteProduct } from '../services/service'
 
 export const createProductController = async (req: Request, res: Response) => {
     const { name, slug, defaultPrice, categories } = req.body
@@ -33,6 +33,22 @@ export const getProductByIdController = async (req: Request, res: Response) => {
         }
     } catch (error) {
         res.status(500).json({ error: "Erreur lors de la récupération du produit"})
+    }
+}
+
+export const updateProductController = async (req: Request, res: Response) => {
+    const { id } = req.params
+    const { name, slug, defaultPrice, categoryId } = req.body
+    //const { name, slug, defaultPrice, categoryId, images } = req.body
+    try {
+        const product = await updateProduct(
+            Number(id), 
+            { name, slug, defaultPrice, categoryId }
+            // { name, slug, defaultPrice, categoryId, images }
+        )
+        res.json(product)
+    } catch (error) {
+        res.status(500).json({ error: "Erreur lors de la mise à jour du produit" })
     }
 }
 
