@@ -11,8 +11,8 @@ services:
       - '8004:8004'
       - '5555:5555'
     environment:
-      CATEGORY_DATABASE_URL: ${CATEGORY_DATABASE_URL}
-      CATEGORY_PORT: ${CATEGORY_PORT}
+      CATEGORY_DATABASE_URL: 'postgres://user:pass@category-db/db'
+      CATEGORY_PORT: 8004
       NODE_ENV: development
     volumes:
       - .:/app/
