@@ -9,17 +9,22 @@ services:
       - user-db
       - category-db
     ports:
-      - "8001:8001"
-      - "8000:8000"
+      - '8001:8001'
+      - '8000:8000'
       - '8004:8004'
       - '5555:5555'
     environment:
-      USER_SERVICE_URL: "http://localhost:8001"
+      USER_SERVICE_URL: 'http://localhost:8001'
       USER_DB_HOST: user-db
       USER_DB_PORT: 5432
       USER_DB_USER: user
       USER_DB_PASSWORD: pass
       USER_DB_DATABASE: user
+      TZ: UTC
+      USER_PORT: 8001
+      HOST: 0.0.0.0
+      LOG_LEVEL: info
+      APP_KEY: J6bYJsoeAFp8mWQlhEu5GkTLT1OosatO
       CATEGORY_DATABASE_URL: 'postgres://user:pass@category-db/db'
       CATEGORY_PORT: 8004
       NODE_ENV: development
@@ -43,4 +48,3 @@ services:
       POSTGRES_USER: user
       POSTGRES_PASSWORD: pass
       POSTGRES_DB: db
-
