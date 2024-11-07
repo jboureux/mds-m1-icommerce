@@ -6,21 +6,32 @@ services:
     build: 
       dockerfile: docker/DEV.Dockerfile
     depends_on:
-      - postgres
+      - product-db
     environment:
-      DATABASE_URL: postgres://user:pass@postgres:5432/db
+      PRODUCT_DATABASE_URL: postgres://product-user:product-password@product-db/product
       NODE_ENV: development
-      PORT: 3000
+      PRODUCT_PORT: 8002
     ports:
-      - "3000:3000"
+      - "8002:8002"
     volumes:
       - .:/app/
+    networks:
+      - product-network
 
-  postgres:
+  product-db:
     image: postgres:17
     ports:
-      - "5432:5432"
+      - "5433:5432"
     environment:
-      POSTGRES_USER: user
-      POSTGRES_PASSWORD: pass
-      POSTGRES_DB: db
+      POSTGRES_USER: product-user
+      POSTGRES_PASSWORD: product-password
+      POSTGRES_DB: product
+    networks:
+      - "product-network"
+
+networks:
+  product-network:
+    driver: bridge
+
+volumes:
+  product_data:

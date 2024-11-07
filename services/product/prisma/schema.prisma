@@ -1,0 +1,42 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("PRODUCT_DATABASE_URL")
+}
+
+model Product {
+  id            Int @id @default(autoincrement())
+  name          String @db.VarChar(255)
+  slug          String @unique
+  defaultPrice  Float
+  //images        ProductImages[]
+  categories    Int @default(1)
+  createdAt     DateTime @default(now())
+  updateAt      DateTime @updatedAt
+}
+
+//model ProductImages {
+//  id            Int @id @default(autoincrement())
+//  productId     Int
+//  url           String
+//  product       Product @relation(fields: [productId], references: [id])
+//}
+
+//model ProductCategory {
+//  id            Int @id @default(autoincrement())
+//  categoryId    Int
+//  productId     Int
+//  product    Product  @relation(fields: [productId], references: [id])
+//  category   Category @relation(fields: [categoryId], references: [id])
+
+//  @@unique([categoryId, productId]) // Unicité des associations
+//}
