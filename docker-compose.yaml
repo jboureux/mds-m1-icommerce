@@ -5,11 +5,22 @@ services:
     restart: on-failure
     build:
       dockerfile: docker/DEV.Dockerfile
+    depends_on:
+      - user-db
+      - cart-db
     environment:
+      USER_SERVICE_URL: "http://localhost:8001"
+      USER_DB_HOST: user-db
+      USER_DB_PORT: 5432
+      USER_DB_USER: user
+      USER_DB_PASSWORD: pass
+      USER_DB_DATABASE: user
       CART_DATABASE_URL: postgres://user:pass@cart-db/cart
       NODE_ENV: development
     ports:
-      - '8005:8005'
+      - '8005:8005"
+      - "8001:8001"
+      - "8000:8000"
     volumes:
       - .:/app/
 
@@ -21,3 +32,12 @@ services:
       POSTGRES_USER: user
       POSTGRES_PASSWORD: pass
       POSTGRES_DB: cart
+      
+  user-db:
+    image: postgres:17
+    ports:
+      - '5432:5432'
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: pass
+      POSTGRES_DB: user
