@@ -19,7 +19,7 @@ model Product {
   slug          String @unique
   defaultPrice  Float
   //images        ProductImages[]
-  categories    Int @default(1)
+  categoryId    Int @default(1)
   createdAt     DateTime @default(now())
   updateAt      DateTime @updatedAt
 }

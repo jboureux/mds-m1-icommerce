@@ -10,6 +10,8 @@ RUN apk --no-cache add curl
 
 USER node
 
-EXPOSE  8000-8007
+EXPOSE  8000-8007 
+
+EXPOSE 5555
 
 CMD pnpm install && pnpm -r dev

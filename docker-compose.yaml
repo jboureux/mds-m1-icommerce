@@ -13,6 +13,7 @@ services:
       PRODUCT_PORT: 8002
     ports:
       - "8002:8002"
+      - "5555:5555"
     volumes:
       - .:/app/
     networks:
@@ -21,7 +22,7 @@ services:
   product-db:
     image: postgres:17
     ports:
-      - "5433:5432"
+      - "5432:5432"
     environment:
       POSTGRES_USER: product-user
       POSTGRES_PASSWORD: product-password
