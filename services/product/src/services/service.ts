@@ -34,3 +34,17 @@ export const getAllProducts= async (categoryFilter?: number) => {
         throw new Error("Erreur lors de la récupération des produits.")
     }
 }
+
+// Service pour obtenir un produit par ID
+export const getProductById = async (id: number) => {
+    try {
+        const product = await prisma.product.findUnique({
+            where: { id },
+            //include: { images: true, categories: { include: { category: true } } },
+        })
+        return product
+    } catch (error) {
+        console.error("Erreur lors de la récupération du produit :", error)
+        throw new Error("Erreur lors de la récupération du produit.")
+    }
+}
