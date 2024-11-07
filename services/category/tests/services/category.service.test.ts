@@ -1,6 +1,6 @@
-import { Request, Response } from 'express';
 import { CategoryService } from '../../src/services/category.service';
 import { db } from '../../src/database';
+import { slugify } from '../../src/utils/constants';
 
 describe('CategoryService', () => {
   let categoryService: CategoryService;
@@ -28,13 +28,7 @@ describe('CategoryService', () => {
   });
 
   describe('getCategories', () => {
-    it('should return categories with status 200', async () => {
-      const req = {} as unknown as Request;
-      const res = {
-        status: jest.fn().mockReturnThis(),
-        json: jest.fn(),
-      } as unknown as Response;
-
+    it('should return categories', async () => {
       const mockCategories = [
         {
           id: 'cuid_123',
@@ -53,42 +47,51 @@ describe('CategoryService', () => {
       ];
       findManySpy.mockResolvedValue(mockCategories);
 
-      await categoryService.getCategories(req, res);
+      const categories = await categoryService.getCategories();
 
       expect(findManySpy).toHaveBeenCalled();
-      expect(res.status).toHaveBeenCalledWith(200);
-      expect(res.json).toHaveBeenCalledWith(mockCategories);
+      expect(categories).toEqual(mockCategories);
     });
 
-    it('should return 500 if an error occurs', async () => {
-      const req = {} as unknown as Request;
-      const res = {
-        status: jest.fn().mockReturnThis(),
-        json: jest.fn(),
-      } as unknown as Response;
-
+    it('should throw an error if fetching categories fails', async () => {
       findManySpy.mockRejectedValue(new Error('Database error'));
 
-      await categoryService.getCategories(req, res);
-
+      await expect(categoryService.getCategories()).rejects.toThrow(
+        'Database error',
+      );
       expect(findManySpy).toHaveBeenCalled();
-      expect(res.status).toHaveBeenCalledWith(500);
-      expect(res.json).toHaveBeenCalledWith({
-        message: 'Error fetching categories',
-      });
+    });
+  });
+
+  describe('getCategoryById', () => {
+    it('should return a category by id', async () => {
+      const mockCategory = {
+        id: 'cuid_123',
+        name: 'Electronics',
+        slug: 'electronics',
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      };
+      findUniqueSpy.mockResolvedValue(mockCategory);
+
+      const category = await categoryService.getCategoryById('cuid_123');
+
+      expect(findUniqueSpy).toHaveBeenCalledWith({ where: { id: 'cuid_123' } });
+      expect(category).toEqual(mockCategory);
+    });
+
+    it('should throw an error if fetching category by id fails', async () => {
+      findUniqueSpy.mockRejectedValue(new Error('Database error'));
+
+      await expect(categoryService.getCategoryById('cuid_123')).rejects.toThrow(
+        'Database error',
+      );
+      expect(findUniqueSpy).toHaveBeenCalledWith({ where: { id: 'cuid_123' } });
     });
   });
 
   describe('createCategory', () => {
-    it('should create a category with status 201', async () => {
-      const req = {
-        body: { name: 'Electronics' },
-      } as unknown as Request;
-      const res = {
-        status: jest.fn().mockReturnThis(),
-        json: jest.fn(),
-      } as unknown as Response;
-
+    it('should create a category', async () => {
       const mockCategory = {
         id: 'cuid_123',
         name: 'Electronics',
@@ -98,55 +101,28 @@ describe('CategoryService', () => {
       };
       createSpy.mockResolvedValue(mockCategory);
 
-      await categoryService.createCategory(req, res);
+      const category = await categoryService.createCategory('Electronics');
 
       expect(createSpy).toHaveBeenCalledWith({
-        data: {
-          name: 'Electronics',
-          slug: 'electronics',
-        },
+        data: { name: 'Electronics', slug: 'electronics' },
       });
-      expect(res.status).toHaveBeenCalledWith(201);
-      expect(res.json).toHaveBeenCalledWith(mockCategory);
+      expect(category).toEqual(mockCategory);
     });
 
-    it('should return 500 if an error occurs', async () => {
-      const req = {
-        body: { name: 'Electronics' },
-      } as unknown as Request;
-      const res = {
-        status: jest.fn().mockReturnThis(),
-        json: jest.fn(),
-      } as unknown as Response;
-
+    it('should throw an error if creating category fails', async () => {
       createSpy.mockRejectedValue(new Error('Database error'));
 
-      await categoryService.createCategory(req, res);
-
+      await expect(
+        categoryService.createCategory('Electronics'),
+      ).rejects.toThrow('Database error');
       expect(createSpy).toHaveBeenCalledWith({
-        data: {
-          name: 'Electronics',
-          slug: 'electronics',
-        },
-      });
-      expect(res.status).toHaveBeenCalledWith(500);
-      expect(res.json).toHaveBeenCalledWith({
-        message: 'Error creating category',
+        data: { name: 'Electronics', slug: 'electronics' },
       });
     });
   });
 
   describe('updateCategory', () => {
-    it('should update a category with status 200', async () => {
-      const req = {
-        params: { id: 'cuid_123' },
-        body: { name: 'New Electronics' },
-      } as unknown as Request;
-      const res = {
-        status: jest.fn().mockReturnThis(),
-        json: jest.fn(),
-      } as unknown as Response;
-
+    it('should update a category', async () => {
       const mockCategory = {
         id: 'cuid_123',
         name: 'New Electronics',
@@ -156,96 +132,47 @@ describe('CategoryService', () => {
       };
       updateSpy.mockResolvedValue(mockCategory);
 
-      await categoryService.updateCategory(req, res);
+      const category = await categoryService.updateCategory(
+        'cuid_123',
+        'New Electronics',
+      );
 
       expect(updateSpy).toHaveBeenCalledWith({
-        where: {
-          id: 'cuid_123',
-        },
-        data: {
-          name: 'New Electronics',
-          slug: 'new-electronics',
-        },
+        where: { id: 'cuid_123' },
+        data: { name: 'New Electronics', slug: 'new-electronics' },
       });
-      expect(res.status).toHaveBeenCalledWith(200);
-      expect(res.json).toHaveBeenCalledWith(mockCategory);
+      expect(category).toEqual(mockCategory);
     });
 
-    it('should return 500 if an error occurs', async () => {
-      const req = {
-        params: { id: 'cuid_123' },
-        body: { name: 'New Electronics' },
-      } as unknown as Request;
-      const res = {
-        status: jest.fn().mockReturnThis(),
-        json: jest.fn(),
-      } as unknown as Response;
-
+    it('should throw an error if updating category fails', async () => {
       updateSpy.mockRejectedValue(new Error('Database error'));
 
-      await categoryService.updateCategory(req, res);
-
+      await expect(
+        categoryService.updateCategory('cuid_123', 'New Electronics'),
+      ).rejects.toThrow('Database error');
       expect(updateSpy).toHaveBeenCalledWith({
-        where: {
-          id: 'cuid_123',
-        },
-        data: {
-          name: 'New Electronics',
-          slug: 'new-electronics',
-        },
-      });
-      expect(res.status).toHaveBeenCalledWith(500);
-      expect(res.json).toHaveBeenCalledWith({
-        message: 'Error updating category',
+        where: { id: 'cuid_123' },
+        data: { name: 'New Electronics', slug: 'new-electronics' },
       });
     });
   });
 
   describe('deleteCategory', () => {
-    it('should delete a category with status 204', async () => {
-      const req = {
-        params: { id: 'cuid_123' },
-      } as unknown as Request;
-      const res = {
-        status: jest.fn().mockReturnThis(),
-        send: jest.fn(),
-      } as unknown as Response;
-
+    it('should delete a category', async () => {
       deleteSpy.mockResolvedValue(undefined);
 
-      await categoryService.deleteCategory(req, res);
+      await categoryService.deleteCategory('cuid_123');
 
-      expect(deleteSpy).toHaveBeenCalledWith({
-        where: {
-          id: 'cuid_123',
-        },
-      });
-      expect(res.status).toHaveBeenCalledWith(204);
-      expect(res.send).toHaveBeenCalled();
+      expect(deleteSpy).toHaveBeenCalledWith({ where: { id: 'cuid_123' } });
     });
 
-    it('should return 500 if an error occurs', async () => {
-      const req = {
-        params: { id: 'cuid_123' },
-      } as unknown as Request;
-      const res = {
-        status: jest.fn().mockReturnThis(),
-        json: jest.fn(),
-      } as unknown as Response;
-
+    it('should throw an error if deleting category fails', async () => {
       deleteSpy.mockRejectedValue(new Error('Database error'));
 
-      await categoryService.deleteCategory(req, res);
-
-      expect(deleteSpy).toHaveBeenCalledWith({
-        where: {
-          id: 'cuid_123',
-        },
-      });
-      expect(res.status).toHaveBeenCalledWith(500);
-      expect(res.json).toHaveBeenCalledWith({
-        message: 'Error deleting category',
-      });
+      await expect(categoryService.deleteCategory('cuid_123')).rejects.toThrow(
+        'Database error',
+      );
+      expect(deleteSpy).toHaveBeenCalledWith({ where: { id: 'cuid_123' } });
     });
   });
 });
