@@ -17,7 +17,11 @@ export class CategoryService {
       },
     });
 
-    res.status(200).json(category);
+    if (!category) {
+      return res.status(404).json({ message: 'Category not found' });
+    }
+
+    return res.status(200).json(category);
   }
 
   async createCategory(req: Request, res: Response) {

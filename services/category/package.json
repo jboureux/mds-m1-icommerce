@@ -31,20 +31,5 @@
     "ts-jest": "^29.2.5",
     "ts-node-dev": "^2.0.0",
     "typescript": "^5.6.3"
-  },
-  "jest": {
-    "transform": {
-      "^.+\\.(t|j)sx?$": "babel-jest"
-    },
-    "moduleFileExtensions": [
-      "js",
-      "jsx",
-      "ts",
-      "tsx",
-      "json",
-      "node"
-    ],
-    "preset": "ts-jest",
-    "testEnvironment": "node"
   }
 }
