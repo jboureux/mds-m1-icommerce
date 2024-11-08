@@ -8,8 +8,10 @@ services:
     depends_on:
       - user-db
       - cart-db
+      - category-db
     environment:
       USER_SERVICE_URL: 'http://localhost:8001'
+      CATEGORY_SERVICE_URL: 'http://localhost:8004'
       USER_DB_HOST: user-db
       USER_DB_PORT: 5432
       USER_DB_USER: user
@@ -18,21 +20,21 @@ services:
       CART_DATABASE_URL: postgres://user:pass@cart-db/cart
       CART_CORS_ALLOWED_ORIGIN: 'http://localhost:8000'
       NODE_ENV: development
+      TZ: UTC
+      PORT: 8001
+      HOST: 0.0.0.0
+      LOG_LEVEL: info
+      APP_KEY: J6bYJsoeAFp8mWQlhEu5GkTLT1OosatO
+      CATEGORY_DATABASE_URL: 'postgres://user:pass@category-db/db'
+      CATEGORY_PORT: 8004
     ports:
       - '8005:8005'
       - '8001:8001'
       - '8000:8000'
+      - '8004:8004'
     volumes:
       - .:/app/
 
-  cart-db:
-    image: postgres:17
-    ports:
-      - '5434:5432'
-    environment:
-      POSTGRES_USER: user
-      POSTGRES_PASSWORD: pass
-      POSTGRES_DB: cart
 
   user-db:
     image: postgres:17
@@ -42,3 +44,21 @@ services:
       POSTGRES_USER: user
       POSTGRES_PASSWORD: pass
       POSTGRES_DB: user
+
+  category-db:
+    image: postgres:17
+    ports:
+      - '5433:5432'
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: pass
+      POSTGRES_DB: db
+
+  cart-db:
+    image: postgres:17
+    ports:
+      - '5434:5432'
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: pass
+      POSTGRES_DB: cart
