@@ -2,8 +2,8 @@ import express from "express"
 import dotenv from "dotenv"
 import { PrismaClient } from "@prisma/client"
 import { error } from "console"
-import ProductRouter from "./src/routes/routes"
-import ProductImageRouter from "./src/routes/routes"
+import ProductRouter from "./src/routes/product.routes"
+import ProductImageRouter from "./src/routes/productImages.routes"
 
 dotenv.config()
 
