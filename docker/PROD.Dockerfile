@@ -30,4 +30,6 @@ RUN npm install --only=prod
 
 EXPOSE ${PORT}
 
+USER node
+
 CMD ["node", "dist/app.js"]

@@ -7,12 +7,8 @@ services:
       dockerfile: docker/DEV.Dockerfile
     depends_on:
       - user-db
+      - cart-db
       - category-db
-    ports:
-      - '8001:8001'
-      - '8000:8000'
-      - '8004:8004'
-      - '5555:5555'
     environment:
       USER_SERVICE_URL: 'http://localhost:8001'
       CATEGORY_SERVICE_URL: 'http://localhost:8004'
@@ -21,16 +17,24 @@ services:
       USER_DB_USER: user
       USER_DB_PASSWORD: pass
       USER_DB_DATABASE: user
+      CART_DATABASE_URL: postgres://user:pass@cart-db/cart
+      CART_CORS_ALLOWED_ORIGIN: 'http://localhost:8000'
+      NODE_ENV: development
       TZ: UTC
-      USER_PORT: 8001
+      PORT: 8001
       HOST: 0.0.0.0
       LOG_LEVEL: info
       APP_KEY: J6bYJsoeAFp8mWQlhEu5GkTLT1OosatO
       CATEGORY_DATABASE_URL: 'postgres://user:pass@category-db/db'
       CATEGORY_PORT: 8004
-      NODE_ENV: development
+    ports:
+      - '8005:8005'
+      - '8001:8001'
+      - '8000:8000'
+      - '8004:8004'
     volumes:
       - .:/app/
+
 
   user-db:
     image: postgres:17
@@ -49,3 +53,12 @@ services:
       POSTGRES_USER: user
       POSTGRES_PASSWORD: pass
       POSTGRES_DB: db
+
+  cart-db:
+    image: postgres:17
+    ports:
+      - '5434:5432'
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: pass
+      POSTGRES_DB: cart
