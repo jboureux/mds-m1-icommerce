@@ -7,18 +7,29 @@ services:
       dockerfile: docker/DEV.Dockerfile
     depends_on:
       - user-db
+      - auth-db
     environment:
+      # user services variables
       USER_SERVICE_URL: 'http://localhost:8001'
       USER_DB_HOST: user-db
-      USER_DB_PORT: 5432
       USER_DB_USER: user
       USER_DB_PASSWORD: pass
       USER_DB_DATABASE: user
+      USER_DATABASE_URL: postgres://user:pass@user-db:5432/user
+      # auth services variables
+      AUTH_SERVICE_URL: 'http://localhost:8002'
+      AUTH_DB_HOST: auth-db
+      AUTH_DB_USER: auth
+      AUTH_DB_PASSWORD: pass
+      AUTH_DB_DATABASE: auth
+      AUTH_DATABASE_URL: postgres://auth:pass@auth-db:5433/auth
     ports:
-      - '3000:3000'
+      - '8000:8000' # api gateway port
+      - '8001:8001' # user service port
+      - '8002:8002' # auth service port
     volumes:
       - .:/app/
-
+  # user-db database
   user-db:
     image: postgres:17
     ports:
@@ -27,3 +38,12 @@ services:
       POSTGRES_USER: user
       POSTGRES_PASSWORD: pass
       POSTGRES_DB: user
+  # auth-db database
+  auth-db:
+    image: postgres:17
+    ports:
+      - '5433:5432'
+    environment:
+      POSTGRES_USER: auth
+      POSTGRES_PASSWORD: pass
+      POSTGRES_DB: auth

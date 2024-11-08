@@ -24,8 +24,8 @@ export default await Env.create(new URL('../', import.meta.url), {
   |----------------------------------------------------------
   */
   USER_DB_HOST: Env.schema.string({ format: 'host' }),
-  USER_DB_PORT: Env.schema.number(),
+  USER_DB_PORT: Env.schema.number.optional(),
   USER_DB_USER: Env.schema.string(),
   USER_DB_PASSWORD: Env.schema.string.optional(),
-  USER_DB_DATABASE: Env.schema.string()
+  USER_DB_DATABASE: Env.schema.string(),
 })
