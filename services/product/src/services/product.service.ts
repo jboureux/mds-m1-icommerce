@@ -3,14 +3,15 @@ import { PrismaClient } from "@prisma/client"
 const prisma = new PrismaClient()
 
 // Service pour créer un produit
-export const createProduct = async (name: string, slug: string, defaultPrice: number, categoryId: number)  => {
+export const createProduct = async (name: string, slug: string, defaultPrice: number, categoryId: number, images: string)  => {
     try {
         const product = await prisma.product.create({
             data: {
                 name,
                 slug,
                 defaultPrice,
-                categoryId
+                categoryId,
+                images
             },
         })
         return product
