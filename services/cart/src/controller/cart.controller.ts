@@ -6,13 +6,10 @@ import { CartItemService } from '../services/cart-item.service';
 import { CartService } from '../services/cart.service';
 
 export class CartController {
-  cartService: CartService;
-  cartItemService: CartItemService;
-
-  constructor() {
-    this.cartService = new CartService();
-    this.cartItemService = new CartItemService();
-  }
+  constructor(
+    private cartService = new CartService(),
+    private cartItemService = new CartItemService(),
+  ) {}
 
   async getUserCart(req: Request, res: Response) {
     if (
@@ -35,12 +32,10 @@ export class CartController {
       return;
     }
 
-    res
-      .status(200)
-      .json({
-        message: `Successfully retrieved Cart of user ${req.params.user_id}`,
-        data: cart,
-      });
+    res.status(200).json({
+      message: `Successfully retrieved Cart of user ${req.params.user_id}`,
+      data: cart,
+    });
   }
 
   async removeCart(req: Request, res: Response) {

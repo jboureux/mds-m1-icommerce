@@ -7,7 +7,11 @@ const app = express();
 app.disable('x-powered-by');
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(cors());
+app.use(
+  cors({
+    origin: process.env.CART_CORS_ALLOWED_ORIGIN,
+  }),
+);
 
 app.use('/cart', CartRouter);
 
