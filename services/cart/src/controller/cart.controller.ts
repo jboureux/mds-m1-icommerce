@@ -1,5 +1,4 @@
 import { Request, Response } from 'express';
-import { z } from 'zod';
 import cart_item_schema from '../schemas/cart-item.schema';
 import cart_schema from '../schemas/cart.schema';
 import { CartItemService } from '../services/cart-item.service';
@@ -82,8 +81,9 @@ export class CartController {
       productId: true,
       quantity: true,
     });
+    const parsedBody = filteredCartItemSchema.safeParse(req.body);
 
-    if (filteredCartItemSchema.safeParse(req.body).success === false) {
+    if (!parsedBody.success) {
       res.status(400).json({
         message:
           'The body is missing the required attributes (productId, quantity)',
@@ -91,8 +91,7 @@ export class CartController {
       return;
     }
 
-    const body: z.infer<typeof filteredCartItemSchema> =
-      filteredCartItemSchema.parse(req.body);
+    const { quantity, productId } = parsedBody.data;
     const userId = parseInt(req.params.user_id);
 
     let cart = await this.cartService.getCartFromUser(userId);
@@ -103,8 +102,8 @@ export class CartController {
 
     const cartItem = await this.cartItemService.createItemInCart({
       cartId: cart.id,
-      productId: body.productId,
-      quantity: body.quantity,
+      productId: productId,
+      quantity: quantity,
     });
 
     res.status(201).json({
