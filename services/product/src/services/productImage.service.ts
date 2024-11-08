@@ -11,6 +11,8 @@ export const addProductImage = async (productId: number, url: string) => {
                 url,
             },
         })
+        console.log(productId, url);
+        
         return productImage
     } catch (error) {
         console.error("Erreur lors de l'ajout de l'image du produit :", error)

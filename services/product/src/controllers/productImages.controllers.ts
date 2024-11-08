@@ -5,6 +5,14 @@ import { addProductImage } from "../services/productImage.service"
 export const addProductImageController = async (req: Request, res: Response) => {
     const { productId, url } = req.body
 
+    // Vérification des valeurs de productId et url
+    if (!productId || typeof productId !== 'number' || !url || typeof url !== 'string') {
+        return res.status(400).json({
+            error: "Les champs productId (nombre) et url (chaîne) sont requis.",
+            data: { productId, url }
+        });
+    } 
+    
     try {
         const productImage = await addProductImage(productId, url)
         res.status(201).json(productImage)

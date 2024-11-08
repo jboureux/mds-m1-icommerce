@@ -14,7 +14,7 @@ app.use(express.json())
 
 // Route pour le service Product
 app.use('/product', ProductRouter)
-app.use('/product-images', ProductImageRouter)
+app.use('/images', ProductImageRouter)
 
 // Gestion d'erreurs génériques
 app.use((
