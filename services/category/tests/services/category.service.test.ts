@@ -1,6 +1,5 @@
 import { CategoryService } from '../../src/services/category.service';
 import { db } from '../../src/database';
-import { slugify } from '../../src/utils/constants';
 
 describe('CategoryService', () => {
   let categoryService: CategoryService;

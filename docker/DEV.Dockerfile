@@ -13,4 +13,4 @@ USER node
 EXPOSE  8000-8007
 EXPOSE  5555
 
-CMD pnpm install && pnpm -r dev
+CMD pnpm install && pnpm -r --workspace-concurrency=7 dev

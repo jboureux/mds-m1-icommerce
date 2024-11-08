@@ -1,14 +1,12 @@
 import { CategoryController } from '../../src/controllers/category.controller';
 import { CategoryService } from '../../src/services/category.service';
 import { Request, Response } from 'express';
-import { z } from 'zod';
 
 describe('CategoryController', () => {
   let categoryService: CategoryService;
   let categoryController: CategoryController;
   let req: Partial<Request>;
   let res: Partial<Response>;
-  let next: jest.Mock;
 
   beforeEach(() => {
     categoryService = {
