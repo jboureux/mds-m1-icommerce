@@ -1,6 +1,6 @@
 
 import { Request, Response } from 'express'
-import { createProduct, getAllProducts, getProductById, updateProduct, deleteProduct } from '../services/service'
+import { createProduct, getAllProducts, getProductById, updateProduct, deleteProduct } from '../services/product.service'
 
 export const createProductController = async (req: Request, res: Response) => {
     const { name, slug, defaultPrice, categories } = req.body

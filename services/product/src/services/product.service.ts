@@ -26,7 +26,9 @@ export const getAllProducts= async (categoryFilter?: number) => {
         const products = await prisma.product.findMany({
             where: categoryFilter ? { categoryId: categoryFilter } : {},
             // On inclut les images et les catégories associés
-            //include: { images: true, categoryId: { include: { category: true} }},
+            include: { 
+                images: true
+            },
         })
         return products
     } catch (error) {
@@ -101,4 +103,4 @@ export const updateProduct = async (id: number,
         console.error("Erreur lors de la suppression du produit :", error)
         throw new Error("Erreur lors de la suppression du produit.")
     }
- } 
+ }

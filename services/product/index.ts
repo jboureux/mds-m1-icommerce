@@ -3,6 +3,7 @@ import dotenv from "dotenv"
 import { PrismaClient } from "@prisma/client"
 import { error } from "console"
 import ProductRouter from "./src/routes/routes"
+import ProductImageRouter from "./src/routes/routes"
 
 dotenv.config()
 
@@ -13,6 +14,7 @@ app.use(express.json())
 
 // Route pour le service Product
 app.use('/product', ProductRouter)
+app.use('/product-images', ProductImageRouter)
 
 // Gestion d'erreurs génériques
 app.use((
