@@ -8,27 +8,43 @@ services:
     depends_on:
       - user-db
       - auth-db
+      - cart-db
+      - category-db
     environment:
-      # user services variables
+      # services URLS
       USER_SERVICE_URL: 'http://localhost:8001'
+      AUTH_SERVICE_URL: 'http://localhost:8002'
+      CATEGORY_SERVICE_URL: 'http://localhost:8004'
+      CART_SERVICE_URL: 'http://localhost:8005'
+      # user services variables
       USER_DB_HOST: user-db
       USER_DB_USER: user
       USER_DB_PASSWORD: pass
       USER_DB_DATABASE: user
-      USER_DATABASE_URL: postgres://user:pass@user-db:5432/user
       # auth services variables
-      AUTH_SERVICE_URL: 'http://localhost:8002'
       AUTH_DB_HOST: auth-db
       AUTH_DB_USER: auth
       AUTH_DB_PASSWORD: pass
       AUTH_DB_DATABASE: auth
-      AUTH_DATABASE_URL: postgres://auth:pass@auth-db:5433/auth
+      # cart services variables
+      CART_DATABASE_URL: postgres://user:pass@cart-db/cart
+      CART_CORS_ALLOWED_ORIGIN: 'http://localhost:8000'
+      # category services variables
+      CATEGORY_DATABASE_URL: 'postgres://user:pass@category-db/category'
+      CATEGORY_PORT: 8004
+      # Common AdonisJS variables
+      TZ: UTC
+      #Common variables
+      NODE_ENV: development
     ports:
       - '8000:8000' # api gateway port
       - '8001:8001' # user service port
       - '8002:8002' # auth service port
+      - '8004:8004' # category service port
+      - '8005:8005' # cart service port
     volumes:
       - .:/app/
+
   # user-db database
   user-db:
     image: postgres:17
@@ -38,6 +54,7 @@ services:
       POSTGRES_USER: user
       POSTGRES_PASSWORD: pass
       POSTGRES_DB: user
+
   # auth-db database
   auth-db:
     image: postgres:17
@@ -47,3 +64,23 @@ services:
       POSTGRES_USER: auth
       POSTGRES_PASSWORD: pass
       POSTGRES_DB: auth
+
+  # category-db database
+  category-db:
+    image: postgres:17
+    ports:
+      - '5434:5432'
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: pass
+      POSTGRES_DB: category
+
+  # cart-db database
+  cart-db:
+    image: postgres:17
+    ports:
+      - '5435:5432'
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: pass
+      POSTGRES_DB: cart
