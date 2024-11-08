@@ -1,29 +1,28 @@
 # 1 - Mapper les ports des micro-services dans les ports du service monorepo
-# 2 - Recréer une nouvelle instance de postgres pour les micro-services  
-services: 
+# 2 - Recréer une nouvelle instance de postgres pour les micro-services
+services:
   monorepo:
     restart: on-failure
-    build: 
+    build:
       dockerfile: docker/DEV.Dockerfile
     depends_on:
       - user-db
     environment:
-      USER_SERVICE_URL: "http://localhost:8001"
+      USER_SERVICE_URL: 'http://localhost:8001'
       USER_DB_HOST: user-db
       USER_DB_PORT: 5432
       USER_DB_USER: user
       USER_DB_PASSWORD: pass
       USER_DB_DATABASE: user
     ports:
-      - "8001:8001"
-      - "8000:8000"
+      - '3000:3000'
     volumes:
       - .:/app/
 
   user-db:
     image: postgres:17
     ports:
-      - "5432:5432"
+      - '5432:5432'
     environment:
       POSTGRES_USER: user
       POSTGRES_PASSWORD: pass
