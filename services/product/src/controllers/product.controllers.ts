@@ -4,13 +4,20 @@ import { createProduct, getAllProducts, getProductById, updateProduct, deletePro
 
 export const createProductController = async (req: Request, res: Response) => {
     const { name, slug, defaultPrice, categoryId } = req.body
-    
+    // Vérification pour s'assurer que les champs sont définis
+    if (!name || !slug || defaultPrice === undefined || categoryId === undefined) {
+        return res.status(400).json({
+            error: "Tous les champs sont requis : name, slug, defaultPrice, categoryId",
+            data: { name, slug, defaultPrice, categoryId }
+        });
+    }
+
     try {
         const product = await createProduct(name, slug, defaultPrice, categoryId)
         res.status(201).json(product)
-        } catch (error) {
-            res.status(500).json({ error: "Erreur lors de la création du produit."})
-        }
+    } catch (error) {
+        res.status(500).json({ error: "Erreur lors de la création du produit."})
+    }
 }
 
 export const getAllProductsController = async (req: Request, res: Response) => {

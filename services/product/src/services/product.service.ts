@@ -3,22 +3,39 @@ import { PrismaClient } from "@prisma/client"
 const prisma = new PrismaClient()
 
 // Service pour créer un produit
-export const createProduct = async (name: string, slug: string, defaultPrice: number, categoryId: number, images: string)  => {
+export const createProduct = async (
+    name: string, 
+    slug: string, 
+    defaultPrice: number, 
+    categoryId: number, 
+    images: string
+)  => {
     try {
-        const product = await prisma.product.create({
-            data: {
-                name,
-                slug,
-                defaultPrice,
-                categoryId,
-                images
-            },
+        const result = await prisma.$transaction(async (tx) => {
+            // Création du Produit dans la table Product
+            const product = await tx.product.create({
+                data: {
+                    name,
+                    slug,
+                    defaultPrice,
+                    images,
+                }
+            })
+
+            // Ajout du Produit et de sa catégorie dans ProductCategory
+            await tx.productCategory.create({
+                data: {
+                    productId: product.id,
+                    categoryId: categoryId,
+                }
+            })
+            return product
         })
-        return product
-        } catch (error) {
-            console.error("Erreur lors de la création du produit :", error)
-            throw new Error("Erreur lors de la création du produit.")
-        }
+        return result
+    } catch (error) {
+        console.error("Erreur lors de la création du produit :", error)
+        throw new Error("Erreur lors de la création du produit.")
+    }
 }
 
 // Service pour obtenir tous les produits
