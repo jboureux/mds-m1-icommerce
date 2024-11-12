@@ -1,24 +1,25 @@
 import { PrismaClient } from "@prisma/client"
+import { ProductData, ProductUpdateData } from "../interfaces/product"
 
 const prisma = new PrismaClient()
 
 // Service pour créer un produit
-export const createProduct = async (
-    name: string, 
-    slug: string, 
-    defaultPrice: number, 
-    categoryId: number, 
-    images: string
-)  => {
+export const createProduct = async (data: ProductData)  => {
     try {
         const result = await prisma.$transaction(async (tx) => {
             // Création du Produit dans la table Product
             const product = await tx.product.create({
                 data: {
-                    name,
-                    slug,
-                    defaultPrice,
-                    images,
+                    name: data.name,
+                    slug: data.slug,
+                    defaultPrice: data.defaultPrice,
+                    images: data.images
+                    ? {
+                        create: {
+                            url: data.images,
+                        },
+                    }
+                    : undefined,
                 }
             })
 
@@ -26,7 +27,7 @@ export const createProduct = async (
             await tx.productCategory.create({
                 data: {
                     productId: product.id,
-                    categoryId: categoryId,
+                    categoryId: data.categoryId,
                 }
             })
             return product
@@ -70,20 +71,19 @@ export const getProductById = async (id: number) => {
 }
 
 // Service pour update un produit
-export const updateProduct = async (id: number, 
-        data: { 
-        name?: string, 
-        slug?: string, 
-        defaultPrice?: number, 
-        categoryId?: number, 
-        //categoryIds?: number[], 
-        //images?: string[] 
-    }) => {
+export const updateProduct = async (
+        id: number, 
+        data: ProductUpdateData
+    ) => {
         try {
             const updatedProduct = await prisma.$transaction(async (prisma) => {
                 const product = await prisma.product.update({
                     where: { id },
-                    data: { name: data.name, slug: data.slug, defaultPrice: data.defaultPrice,  categoryId: data.categoryId},
+                    data: { 
+                        name: data.name,
+                        slug: data.slug,
+                        defaultPrice: data.defaultPrice,
+                        categoryId: data.categoryId}
                 })
 
                 /*if (data.categoryIds) {

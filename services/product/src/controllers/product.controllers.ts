@@ -3,7 +3,7 @@ import { Request, Response } from 'express'
 import { createProduct, getAllProducts, getProductById, updateProduct, deleteProduct } from '../services/product.service'
 
 export const createProductController = async (req: Request, res: Response) => {
-    const { name, slug, defaultPrice, categoryId } = req.body
+    const { name, slug, defaultPrice, categoryId, images } = req.body
     // Vérification pour s'assurer que les champs sont définis
     if (!name || !slug || defaultPrice === undefined || categoryId === undefined) {
         return res.status(400).json({
@@ -13,10 +13,11 @@ export const createProductController = async (req: Request, res: Response) => {
     }
 
     try {
-        const product = await createProduct(name, slug, defaultPrice, categoryId)
+        const product = await createProduct({name, slug, defaultPrice, categoryId, images})
         res.status(201).json(product)
     } catch (error) {
         res.status(500).json({ error: "Erreur lors de la création du produit."})
+        console.log("Corps de la requête reçu :", req.body);
     }
 }
 
