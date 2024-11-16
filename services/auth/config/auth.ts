@@ -14,8 +14,3 @@ const authConfig = defineConfig({
 })
 
 export default authConfig
-
-/**
- * Inferring types from the configured auth
- * guards.
- */

@@ -3,20 +3,21 @@ import UserService from '#services/user_service'
 
 @inject()
 export default class UsersController {
-  constructor(
-    private userService: UserService
-  ) {}
+  constructor(private userService: UserService) {}
 
   registerUser() {
     return this.userService.register()
   }
 
-  loginUser(){
+  loginUser() {
     return this.userService.login()
   }
 
-  deleteAll(){
-     return this.userService.deleteAll()
+  deleteAll() {
+    return this.userService.deleteAll()
   }
 
+  getUserData() {
+    return this.userService.getUserData()
+  }
 }

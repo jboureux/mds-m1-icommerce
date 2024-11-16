@@ -7,11 +7,11 @@ const dbConfig = defineConfig({
     postgres: {
       client: 'pg',
       connection: {
-        host: env.get('USER_DB_HOST'),
-        port: env.get('USER_DB_PORT'),
-        user: env.get('USER_DB_USER'),
-        password: env.get('USER_DB_PASSWORD'),
-        database: env.get('USER_DB_DATABASE'),
+        port: env.get('AUTH_DB_PORT'),
+        host: env.get('AUTH_DB_HOST'),
+        user: env.get('AUTH_DB_USER'),
+        password: env.get('AUTH_DB_PASSWORD'),
+        database: env.get('AUTH_DB_DATABASE'),
       },
       migrations: {
         naturalSort: true,
