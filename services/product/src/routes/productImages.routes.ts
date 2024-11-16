@@ -1,8 +1,8 @@
-import express from 'express'
+import express, { Router } from "express"
 
 import { addProductImageController } from '../controllers/productImages.controllers'
 
-const ProductImageRouter = express.Router()
+const ProductImageRouter: Router = express.Router()
 
 // Route pour ajouter une image
 ProductImageRouter.post('/', addProductImageController)

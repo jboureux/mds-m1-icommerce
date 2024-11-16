@@ -1,4 +1,4 @@
-import express from "express"
+import express, { Express } from "express"
 import dotenv from "dotenv"
 import { PrismaClient } from "@prisma/client"
 import ProductRouter from "./src/routes/product.routes"
@@ -27,12 +27,23 @@ app.use((
 
 const PORT = process.env.PRODUCT_PORT || 3000
 
-app.listen(PORT, () => {
-    console.log(`Serveur en cours d'exécution sur http://localhost:${PORT}`)
-})
+let server: any
+
+// On évite de démarrer le serveur lors des tests
+if (process.env.NODE_ENV !== 'test') {
+    server = app.listen(PORT, () => {
+        console.log(`Serveur en cours d'exécution sur http://localhost:${PORT}`)
+    })
+}
 
 process.on('SIGINT', async () => {
+    if (server) {
+        server.close()
+    }
     await prisma.$disconnect()
     console.log('Déconnexion de la base de donnée.')
     process.exit(0)
 })
+
+export default app
+export {server}

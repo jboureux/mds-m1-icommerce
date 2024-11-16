@@ -1,19 +1,21 @@
 
-import { Request, Response } from 'express'
+import { Request, Response, RequestHandler } from 'express'
 import { createProduct, getAllProducts, getProductById, updateProduct, deleteProduct } from '../services/product.service'
 
-export const createProductController = async (req: Request, res: Response) => {
-    const { name, slug, defaultPrice, categoryId, images } = req.body
-    // Vérification pour s'assurer que les champs sont définis
-    if (!name || !slug || defaultPrice === undefined || categoryId === undefined) {
-        return res.status(400).json({
-            error: "Tous les champs sont requis : name, slug, defaultPrice, categoryId",
-            data: { name, slug, defaultPrice, categoryId }
-        });
+
+export const createProductHandler: RequestHandler = async (req, res, next) => {
+    try {
+        await createProductController(req, res);
+    } catch (error) {
+        next(error)
     }
+}
+
+export const createProductController = async (req: Request, res: Response): Promise<void> => {
+    const { name, slug, defaultPrice, categoryId, images } = req.body
 
     try {
-        const product = await createProduct({name, slug, defaultPrice, categoryId, images})
+        const product = await createProduct({ name, slug, defaultPrice, categoryId, images })
         res.status(201).json(product)
     } catch (error) {
         res.status(500).json({ error: "Erreur lors de la création du produit."})
