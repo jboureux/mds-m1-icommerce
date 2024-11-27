@@ -7,20 +7,12 @@ info:
 tags:
   - name: Categories
     description: Categories management operations
-  - name: Formations
-    description: Formation management operations
 
 paths:
   /users:
     $ref: './category.swagger.yaml'
-  # /formations:
-  #   $ref: "./formations.swagger.yaml"
-  # /chapters:
-  #   $ref: "./chapters.swagger.yaml"
 
 components:
   schemas:
     User:
       $ref: './category.swagger.yaml#/components/schemas/Category'
-    # Formation:
-    #   $ref: "./formations.yaml#/components/schemas/Formation"
