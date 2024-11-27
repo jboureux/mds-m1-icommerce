@@ -6,26 +6,23 @@ services:
     build:
       dockerfile: docker/DEV.Dockerfile
     depends_on:
-      - product-db
       - user-db
       - auth-db
       - cart-db
       - category-db
+      - product-db
     environment:
       # services URLS
       USER_SERVICE_URL: 'http://localhost:8001'
       AUTH_SERVICE_URL: 'http://localhost:8002'
-      PRODUCT_SERVICE_URL: 'http://localhost:8003'
       CATEGORY_SERVICE_URL: 'http://localhost:8004'
       CART_SERVICE_URL: 'http://localhost:8005'
+      PRODUCT_SERVICE_URL: 'http://localhost:8006'
       # user services variables
       USER_DB_HOST: user-db
       USER_DB_USER: user
       USER_DB_PASSWORD: pass
       USER_DB_DATABASE: user
-      # product service variables
-      PRODUCT_DATABASE_URL: postgres://product-user:product-password@product-db/product
-      PRODUCT_PORT: 8003
       # auth services variables
       AUTH_DB_HOST: auth-db
       AUTH_DB_USER: auth
@@ -37,6 +34,9 @@ services:
       # category services variables
       CATEGORY_DATABASE_URL: 'postgres://user:pass@category-db/category'
       CATEGORY_PORT: 8004
+      # product services variables
+      PRODUCT_DATABASE_URL: 'postgres://user:pass@product-db/product'
+      PRODUCT_PORT: 8006
       # Common AdonisJS variables
       TZ: UTC
       #Common variables
@@ -45,15 +45,12 @@ services:
       - '8000:8000' # api gateway port
       - '8001:8001' # user service port
       - '8002:8002' # auth service port
-      - '8003:8003' # product service port
       - '8004:8004' # category service port
       - '8005:8005' # cart service port
-      - '5555:5555' # prisma studio port
+      - '8006:8006' # product service port
     volumes:
       - .:/app/
-    networks:
-      - product-network
-      
+
   # user-db database
   user-db:
     image: postgres:17
@@ -93,22 +90,13 @@ services:
       POSTGRES_USER: user
       POSTGRES_PASSWORD: pass
       POSTGRES_DB: cart
-      
-  # cart-db database
+
+  # product-db database
   product-db:
     image: postgres:17
     ports:
       - '5436:5432'
     environment:
-      POSTGRES_USER: product-user
-      POSTGRES_PASSWORD: product-password
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: pass
       POSTGRES_DB: product
-    networks:
-      - "product-network"
-
-networks:
-  product-network:
-    driver: bridge
-
-volumes:
-  product_data:
