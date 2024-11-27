@@ -7,6 +7,7 @@ import ProductImageRouter from "./src/routes/productImages.routes"
 dotenv.config()
 
 const app = express()
+app.disable("x-powered-by")
 const prisma = new PrismaClient()
 
 app.use(express.json())
