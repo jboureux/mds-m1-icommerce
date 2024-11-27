@@ -3,4 +3,3 @@ temp-sh:
 
 monorepo-sh:
 	docker compose exec monorepo /bin/sh
-
