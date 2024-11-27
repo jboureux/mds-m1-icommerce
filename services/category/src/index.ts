@@ -5,6 +5,7 @@ import CategoryRoute from './routes/category.route';
 dotenv.config({ path: '../../.env' });
 
 export const app = express();
+app.disable('x-powered-by');
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));

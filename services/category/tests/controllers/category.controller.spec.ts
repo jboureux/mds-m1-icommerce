@@ -1,12 +1,13 @@
 import { CategoryController } from '../../src/controllers/category.controller';
 import { CategoryService } from '../../src/services/category.service';
-import { Request, Response } from 'express';
+import { Request, Response, NextFunction } from 'express';
 
 describe('CategoryController', () => {
   let categoryService: CategoryService;
   let categoryController: CategoryController;
   let req: Partial<Request>;
   let res: Partial<Response>;
+  let next: NextFunction;
 
   beforeEach(() => {
     categoryService = {
