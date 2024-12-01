@@ -1,17 +1,8 @@
 
-import { Request, Response, RequestHandler } from 'express'
+import { Request, Response } from 'express'
 import { createProduct, getAllProducts, getProductById, updateProduct, deleteProduct } from '../services/product.service'
 
-
-export const createProductHandler: RequestHandler = async (req, res, next) => {
-    try {
-        await createProductController(req, res);
-    } catch (error) {
-        next(error)
-    }
-}
-
-export const createProductController = async (req: Request, res: Response): Promise<void> => {
+export const createProductController = async (req: Request, res: Response) => {
     const { name, slug, defaultPrice, categoryId, images } = req.body
 
     try {
