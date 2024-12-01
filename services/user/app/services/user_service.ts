@@ -7,24 +7,6 @@ import { HttpContext } from '@adonisjs/core/http'
 export default class UserService {
   constructor(private ctx: HttpContext) {}
 
-  async deleteAll() {
-    const { response } = this.ctx
-
-    try {
-      await User.query().delete()
-      return response.status(200).json({
-        result: true,
-        message: 'All users deleted successfully',
-      })
-    } catch (error) {
-      console.error('Error in deleteAll:', error)
-      return response.status(500).json({
-        result: false,
-        error: 'Internal server error',
-      })
-    }
-  }
-
   async register() {
     const { request, response } = this.ctx
 
@@ -35,7 +17,7 @@ export default class UserService {
 
       return response.created({ message: 'user created succesfully', user })
     } catch (error) {
-      return response.badRequest({ error: error.message })
+      return response.badRequest({ error: error })
     }
   }
 

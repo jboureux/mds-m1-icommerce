@@ -14,8 +14,7 @@ const UsersController = () => import('#controllers/users_controller')
 router
   .group(() => {
     router.post('register', [UsersController, 'registerUser']),
-      router.post('login', [UsersController, 'loginUser']),
-      router.post('userData', [UsersController, 'getUserData']),
-      router.delete('deleteMany', [UsersController, 'deleteAll'])
+    router.post('login', [UsersController, 'loginUser']),
+    router.post('userData', [UsersController, 'getUserData'])
   })
   .prefix('/user')

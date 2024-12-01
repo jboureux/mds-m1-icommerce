@@ -12,11 +12,7 @@ export default class UsersController {
   loginUser() {
     return this.userService.login()
   }
-
-  deleteAll() {
-    return this.userService.deleteAll()
-  }
-
+  
   getUserData() {
     return this.userService.getUserData()
   }
